@@ -5,6 +5,9 @@ OVERVIEW
 |  (Flask Frontend)  |         | (Flask + SQLAlchemy|         |    (MySQL DB)      |
 |  Port: 5000        |         |  + JWT Auth)       |         |  Port: 3306        |
 +--------------------+         +--------------------+         +--------------------+
+
+
+
 STEP 1: DATABASE SERVER SETUP
 1. Install MySQL
 sudo apt update
@@ -56,6 +59,10 @@ You should see:
 | appuser | % | mysql_native_password |
 That means Flask’s mysqlclient driver can connect successfully.
 
+
+
+
+
 STEP 2: APP SERVER SETUP (Flask Backend)
 1. Install Python and build dependencies
 sudo apt update
@@ -102,6 +109,13 @@ Should show:
 | user |
 7. Run app in background (APP SERVER)
 nohup python3 app.py > app_server.log 2>&1 &
+
+
+
+
+
+
+
 STEP 3: WEB SERVER SETUP (Frontend)
 1. Install Python
 sudo apt update
@@ -123,15 +137,10 @@ export WEB_PORT=5000
 6. Allow port and run frontend in background
 nohup python3 app.py > web_server.log 2>&1 &
 STEP 4: ACCESS THE APPLICATION
-Open your browser and visit:
+Open your browser and visit : http://<PUBLIC_IP_OF_WEB_SERVER>:5000
+The Web Server proxies API requests to : http://<APP_SERVER_PRIVATE_IP>:5001
+which connects to : <DB_SERVER_PRIVATE_IP>:3306
 
-http://<PUBLIC_IP_OF_WEB_SERVER>:5000
-The Web Server proxies API requests to:
-
-http://<APP_SERVER_PRIVATE_IP>:5001
-which connects to:
-
-<DB_SERVER_PRIVATE_IP>:3306
 STEP 5: VERIFY CONNECTIVITY
 From App Server → DB Server
 mysql -h <DB_SERVER_PRIVATE_IP> -u appuser -p
@@ -141,6 +150,7 @@ Expected:
 
 {"status": "ok"}
 From Browser → Web Server
+
 http://<PUBLIC_IP_WEB_SERVER>:5000
 You should see the VCube App interface.
 
